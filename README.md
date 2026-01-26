@@ -81,11 +81,16 @@ python -m venv .venv
 source .venv/bin/activate   # (Windows: .venv\Scripts\activate)
 pip install -r requirements.txt
 
-# Gerar um banco grande offline (sem API keys)
+# gerar um banco grande offline (sem API keys)
 python scripts/generate_bank_templates.py --out data/items_bank.jsonl --n_per_cell 12 --seed 42
 
-# Treinar PPO (salva em models/)
+# treinar PPO (salva em models/)
 python train_ppo.py --bank data/items_bank.jsonl --timesteps 200000 --seed 0 --out models/ppo_20actions.zip
 
-# Avaliar baselines vs PPO
+# avaliar baselines vs PPO
 python eval_baselines.py --bank data/items_bank.jsonl --model models/ppo_20actions.zip --episodes 200 --seed 1
+
+# treinar e avaliar PPO com 3 seeds
+python train_ppo.py --bank data/items_bank.jsonl --timesteps 50000 --seed 0 --out models/ppo_seed0.zip --vecnorm models/vecnormalize_seed0.pkl
+python train_ppo.py --bank data/items_bank.jsonl --timesteps 50000 --seed 1 --out models/ppo_seed1.zip --vecnorm models/vecnormalize_seed1.pkl
+python train_ppo.py --bank data/items_bank.jsonl --timesteps 50000 --seed 2 --out models/ppo_seed2.zip --vecnorm models/vecnormalize_seed2.pkl
