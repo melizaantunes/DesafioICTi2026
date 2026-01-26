@@ -4,7 +4,7 @@ Este repositório contém um protótipo de um tutor adaptativo de exercícios de
 - **Banco de questões** em JSONL (estático; pode ser gerado offline via templates).
 - **Ambiente Gymnasium** com um estudante simulado (habilidade + engajamento).
 - **Treinamento com PPO** (Stable-Baselines3) + avaliação de baselines.
-- Relatório pós-sessão simples (template-based; LLM é opcional).
+- Relatório pós-sessão simples (template-based)
 
 ## Estrutura (arquivos principais)
 
