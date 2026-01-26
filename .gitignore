@@ -17,7 +17,6 @@ venv/
 # Artifacts / outputs
 models/
 runs/
-figs/
 *.pkl
 *.zip
 
