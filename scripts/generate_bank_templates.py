@@ -84,7 +84,7 @@ def make_short_text(rng: random.Random, d: int) -> dict:
         "_b": frac_str(ex.b),
     }
 
-##jamais podemos dividir por zero (dica da prof):)
+##jamais podemos dividir por zero (dica da prof:))
 def _safe_fraction(n: int, d: int) -> Fraction | None:
     if d == 0:
         return None
@@ -116,29 +116,29 @@ def make_mcq(rng: random.Random, d: int) -> dict:
 
     # erros comuns que vemos em sala de aula
     if op in ("add", "sub"):
-        # denominadores diferentes e o aluno soma ou subtrai diretamente numerador e denominador
+        #denominadores diferentes e o aluno soma ou subtrai diretamente numerador e denominador
         wrong1 = _safe_fraction(a.numerator + (b.numerator if op == "add" else -b.numerator),
                                 a.denominator + b.denominator)
         add_candidate(wrong1)
-        # denominadores diferentes e o aluno soma ou subtrai apenas os denominadores
+        #denominadores diferentes e o aluno soma ou subtrai apenas os denominadores
         wrong2 = _safe_fraction(a.numerator + (b.numerator if op == "add" else -b.numerator),
                                 a.denominator)
         add_candidate(wrong2)
     elif op == "mul":
-        # multiplica numeradores mas mantém denominadores
+        #multiplica numeradores mas mantém denominadores
         wrong1 = _safe_fraction(a.numerator * b.numerator, a.denominator)
         add_candidate(wrong1)
-    else:  # div
-        # multiplica ao invez de dividir
+    else:  #div
+        #multiplica ao invez de dividir
         wrong1 = a * b
         add_candidate(wrong1)
 
-    # fazendo perturbações pra criar distratores
+    #fazendo perturbacoes pra criar distratores
     for delta_n, delta_d in [(1,0), (-1,0), (0,1), (0,-1), (1,1), (-1,1)]:
         cand = _safe_fraction(correct.numerator + delta_n, correct.denominator + delta_d)
         add_candidate(cand)
 
-    # se por algum motivo ainda não tiver 3 alternativas, preenchemos com frações aleatórias plausíveis
+    #se por algum motivo ainda não tiver 3 alternativas, preenchemos com frações aleatórias plausíveis
     tries = 0
     while len(distractors) < 3 and tries < 200:
         tries += 1
@@ -147,7 +147,7 @@ def make_mcq(rng: random.Random, d: int) -> dict:
         cand = _safe_fraction(nn, dn)
         add_candidate(cand)
 
-    # usando tambem algumas respostas "padrao" como distratores
+    #usando tambem algumas respostas "padrao" como distratores
     fallback = ["0/1", "1/2", "2/1", "3/2", "2/3", "3/4"]
     for fb in fallback:
         if len(distractors) >= 3:
@@ -163,7 +163,7 @@ def make_mcq(rng: random.Random, d: int) -> dict:
     base["statement"] = base["statement"].replace("Calcule:", "Escolha a alternativa correta para:") + " (resposta em forma de fração)"
     base["skills"] = base["skills"] + ["múltipla escolha"]
 
-    # remove internal fields
+    #remove internal fields
     base.pop("_op", None)
     base.pop("_a", None)
     base.pop("_b", None)

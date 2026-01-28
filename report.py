@@ -50,23 +50,21 @@ def template_report(session_log: list[dict]) -> str:
     #assumindo que questoes do tipo "visual" e "scaffold" tendem a ser mais pesados
     heavy = sum(fmt_counts[f] for f in ["visual", "scaffold"])
 
-    # Se teve muitos itens pesados (>=3 ou >= 1/3 do total), escreve uma observação
+    #se teve muitos itens pesados (>=3 ou >= 1/3 do total), escreve uma obs
     if heavy >= max(3, len(session_log)//3):
         lines.append("Observação: muitos itens com maior carga de leitura (visual/scaffold).")
         lines.append("Se houver queda de engajamento, tente alternar com itens short_text ou múltipla escolha.")
         lines.append("")
 
-    # ---------- SUGESTÕES GERAIS ----------
+    #SUGESTOES GERAIS (SEMPRE DEVOLVO ESSA INFO (poderia posteriormente pensar em adaptar esse texto conforme o resultado do aluno))
     lines.append("Próximos passos sugeridos:")
     lines.append("- Revisar habilidades com mais erros e repetir com dificuldade 1-2.")
     lines.append("- Aumentar dificuldade gradualmente quando o acerto ficar acima de ~70%.")
-
-    # Junta tudo em uma string final com quebras de linha
     return "\n".join(lines)
 
 def main():
 
-    ap = argparse.ArgumentParser()  # cria o "parser" de argumentos
+    ap = argparse.ArgumentParser() 
     #caminho do arquivo JSON que contém a lista de step infos
     ap.add_argument("--log", type=str, required=True, help="Path to a JSON list of step infos.")
     ap.add_argument("--out", type=str, default="runs/report.txt")

@@ -15,8 +15,8 @@ class LLMExercise(BaseModel):
     options: List[str] = Field(default_factory=list) #caso seja de multipla escolha, as alternativas
     correct_index: int = -1 #indice da alternativa correta (ou -1 quando nao for de alternativa)
     solution: str #explicação curta
-    skills: List[str] = Field(default_factory=list) #habilidades envolvidas (ex.: simplificação, equivalência)
-    tags: List[str] = Field(default_factory=list) #tags: tags livres para ajudar depois (ex.: 'frações', 'visual')
+    skills: List[str] = Field(default_factory=list) #habilidades envolvidas 
+    tags: List[str] = Field(default_factory=list) #tags
 
 
 #configurando meu banco de questoes
@@ -110,7 +110,7 @@ def main():
     items_written = 0
     errors_written = 0
 
-    # abrindo dois arquivos: um para itens válidos e outro para logs de erro
+    #abrindo dois arquivos: um para itens válidos e outro para logs de erro
     with out_path.open("w", encoding="utf-8") as f, err_path.open("w", encoding="utf-8") as ferr:
         for fmt in FORMATS.keys():
             for d in DIFFICULTIES:
@@ -136,14 +136,14 @@ def main():
                         items_written += 1
                         print(f"[OK] {item['id']}")
 
-                        # Pequena pausa para evitar rate limit
+                        #pequena pausa para evitar rate limit
                         time.sleep(0.3)
 
                     except Exception as e:
                         msg = str(e)
                         print(f"[ERRO] fmt={fmt}, d={d}, v={v} -> {e}")
 
-                        # salvando erro em JSONL separado (para rastreabilidade)
+                        #salvando erro em JSONL separado (para rastreabilidade)
                         error_record = {
                             "status": "error",
                             "topic": TOPIC,
@@ -157,12 +157,12 @@ def main():
                         ferr.write(json.dumps(error_record, ensure_ascii=False) + "\n")
                         errors_written += 1
 
-                        # Caso haja um problema de quota
+                        #problema de quota
                         if "RESOURCE_EXHAUSTED" in msg or "429" in msg:
                             print("Quota atingida. Encerrando geração para não desperdiçar tentativas.")
-                            break  # sai do loop mais interno
+                            break  #sai do loop mais interno
 
-                #(garante que não continue iterando sem chance de sucesso)
+                #garante que não continue iterando sem chance de sucesso
                 if "msg" in locals() and ("RESOURCE_EXHAUSTED" in str(msg) or "429" in str(msg)):
                     break
             if "msg" in locals() and ("RESOURCE_EXHAUSTED" in str(msg) or "429" in str(msg)):

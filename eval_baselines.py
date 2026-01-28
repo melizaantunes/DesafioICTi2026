@@ -85,7 +85,7 @@ def policy_engagement(obs, rng: random.Random) -> int:
     last_correct = float(obs[3])
     last_d_norm = float(obs[4])
 
-    #quando o engajamento está caindo, prioriza itens mais leves e fáceis
+    #quando o engajamento está caindo, prioriza itens mais leves e faceis
     if engagement < 0.35 or last_load > 0.70:
         d = 1 if engagement < 0.25 else 2
         fmt = "multiple_choice"
@@ -126,7 +126,7 @@ def main():
 
     res = {}
 
-    # avaliando as baselines
+    #avaliando as baselines
     for name, pol in [("random", policy_random), ("staircase", policy_staircase), ("engagement", policy_engagement)]:
         eps = []
         for i in range(args.episodes):
@@ -135,7 +135,7 @@ def main():
             eps.append(run_episode(env, pol, rng, seed=args.seed + i))
         res[name] = eps #guardando os episodios pra cada baseline
 
-    # avaliando o PPO
+    #avaliando o PPO
     try:
         model, venv = load_ppo(args.model, args.bank)
 
@@ -155,7 +155,7 @@ def main():
     except Exception as e:
         print(f"[WARN] Could not load PPO model: {e}")
 
-    # salvando as metricas
+    #salvando as metricas
     out_json = Path(args.outdir) / "summary.json"
     #resumo
     def summarize(eps):
@@ -182,12 +182,12 @@ def main():
     out_json.write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"Wrote {out_json}")
 
-    # histograma
+    #histograma
     plt.figure()
     for k, eps in res.items():
         plt.hist([e.return_sum for e in eps], bins=20, alpha=0.5, label=k)
-    plt.xlabel("Episode return")
-    plt.ylabel("Count")
+    plt.xlabel("Retorno do episodio")
+    plt.ylabel("Contagem")
     plt.legend()
     out_png = Path(args.outdir) / "returns_hist.png"
     plt.savefig(out_png, dpi=140, bbox_inches="tight")
